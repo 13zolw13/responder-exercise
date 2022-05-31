@@ -96,7 +96,24 @@ describe('Questions', () => {
 })
 
   describe('Answers', () => {
-    
+    test('should return answers from specific question ', async () => {
+      const testQuestions = [
+        {
+          id: faker.datatype.uuid(),
+          summary: 'What is my name?',
+          answers: []
+        },
+        {
+          id: faker.datatype.uuid(),
+          summary: 'who let the dogs out?',
+          answers: []
+        }
+      ]
+
+      await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+      const response = await questionRepo.getAnswers(testQuestions[0].id)
+      expect(response).toEqual(testQuestions[0].answers)
+    })
     
   });
   
