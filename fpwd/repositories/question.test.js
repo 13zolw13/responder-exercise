@@ -65,4 +65,31 @@ describe('question repository', () => {
       expect(response).toEqual(testQuestions[0])
     })
   })
+
+  describe('Test method addQuestion', () => {
+    test('should add a question', async () => {
+      const newQuestion = {
+        id: faker.datatype.uuid(),
+        summary: 'What the fox say?',
+        answers: []
+      }
+      const testQuestions = [
+        {
+          id: faker.datatype.uuid(),
+          summary: 'What is my name?',
+          answers: []
+        },
+        {
+          id: faker.datatype.uuid(),
+          summary: 'who let the dogs out?',
+          answers: []
+        }
+      ]
+
+      await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+      questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
+      await questionRepo.addQuestion(newQuestion)
+      expect(await questionRepo.getQuestions()).toHaveLength(3)
+    })
+  })
 })
