@@ -2,6 +2,7 @@ const { writeFile, rm } = require('fs/promises')
 const { faker } = require('@faker-js/faker')
 const { makeQuestionRepository } = require('./question')
 const { get } = require('http')
+const { writeToFileMockData } = require('./writeToFileMockData')
 
 const QuestionsMock = [
   {
@@ -113,6 +114,4 @@ describe('question repository', () => {
   })
 })
 
-async function writeToFileMockData(TEST_QUESTIONS_FILE_PATH, QuestionsMock) {
-  await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(QuestionsMock))
-}
+
