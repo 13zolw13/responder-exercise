@@ -45,18 +45,13 @@ describe('question repository', () => {
   afterAll(async () => {
     await rm(TEST_QUESTIONS_FILE_PATH)
   })
+  beforeEach(async () => {
+    writeToFileMockData(TEST_QUESTIONS_FILE_PATH, QuestionsMock)
+  })
 
   describe('Questions', () => {
     describe('Test method getQuestions', () => {
-      test('should return a list of 0 questions', async () => {
-        expect(await questionRepo.getQuestions()).toHaveLength(0)
-      })
-
       test(`should return a list of ${QuestionsMock.length} questions`, async () => {
-        const testQuestions = QuestionsMock
-
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
-
         expect(await questionRepo.getQuestions()).toHaveLength(
           QuestionsMock.length
         )
@@ -65,13 +60,10 @@ describe('question repository', () => {
 
     describe('Test method getQuestionById', () => {
       test('should return a question search by id', async () => {
-        const testQuestions = QuestionsMock
-
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
 
-        const response = await questionRepo.getQuestionById(testQuestions[0].id)
-        expect(response).toEqual(testQuestions[0])
+        const response = await questionRepo.getQuestionById(QuestionsMock[0].id)
+        expect(response).toEqual(QuestionsMock[0])
       })
     })
 
@@ -82,9 +74,7 @@ describe('question repository', () => {
           summary: 'What the fox say?',
           answers: []
         }
-        const testQuestions = QuestionsMock
 
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
         await questionRepo.addQuestion(newQuestion)
         expect(await questionRepo.getQuestions()).toContainEqual(newQuestion)
@@ -95,45 +85,34 @@ describe('question repository', () => {
   describe('Answers', () => {
     describe('Test getAnswers', () => {
       test('should return answers from specific question ', async () => {
-        const testQuestions = QuestionsMock
-
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
-        const response = await questionRepo.getAnswers(testQuestions[0].id)
-        expect(response).toEqual(testQuestions[0].answers)
+        const response = await questionRepo.getAnswers(QuestionsMock[0].id)
+        expect(response).toEqual(QuestionsMock[0].answers)
       })
     })
     describe('Test getAnswer', () => {
       test('should return a specific answer', async () => {
-        const testQuestions = QuestionsMock
-
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         const response = await questionRepo.getAnswer(
-          testQuestions[0].id,
-          testQuestions[0].answers[0].id
+          QuestionsMock[0].id,
+          QuestionsMock[0].answers[0].id
         )
-        expect(response).toEqual(testQuestions[0].answers[0])
+        expect(response).toEqual(QuestionsMock[0].answers[0])
       })
     })
     describe('Test addAnswer', () => {
       test('should add answer to a question', async () => {
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            answers: []
-          }
-        ]
-
-        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         const newAnswer = {
           id: faker.datatype.uuid(),
           summary: 'Jack London'
         }
-        await questionRepo.addAnswer(testQuestions[0].id, newAnswer)
-        expect(await questionRepo.getAnswers(testQuestions[0].id)).toEqual([
+        await questionRepo.addAnswer(QuestionsMock[1].id, newAnswer)
+        expect(await questionRepo.getAnswers(QuestionsMock[1].id)).toEqual([
           newAnswer
         ])
       })
     })
   })
 })
+
+async function writeToFileMockData(TEST_QUESTIONS_FILE_PATH, QuestionsMock) {
+  await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(QuestionsMock))
+}
