@@ -20,7 +20,11 @@ const makeQuestionRepository = fileName => {
 
     await writeFile(fileName, JSON.stringify(questions))
   }
-  const getAnswers = async questionId => {}
+  const getAnswers = async questionId => {
+    const question = await getQuestionById(questionId)
+
+    return question.answers
+  }
   const getAnswer = async (questionId, answerId) => {}
   const addAnswer = async (questionId, answer) => {}
 
