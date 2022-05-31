@@ -140,5 +140,26 @@ describe('question repository', () => {
         expect(response).toEqual(testQuestions[0].answers[0])
       })
     })
+    describe('Test addAnswer', () => {
+      test('should add answer to question', async () => {
+        const testQuestions = [
+          {
+            id: faker.datatype.uuid(),
+            summary: 'What is my name?',
+            answers: []
+          }
+        ]
+
+        await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+        const newAnswer = {
+          id: faker.datatype.uuid(),
+          summary: 'Jack London'
+        }
+        await questionRepo.addAnswer(testQuestions[0].id, newAnswer)
+        expect(await questionRepo.getAnswers(testQuestions[0].id)).toEqual([
+          newAnswer
+        ])
+      })
+    })
   })
 })
