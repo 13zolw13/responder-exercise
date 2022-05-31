@@ -16,6 +16,7 @@ describe('question repository', () => {
     await rm(TEST_QUESTIONS_FILE_PATH)
   })
 
+describe('Questions', () => {
   describe('Test method getQuestions', () => {
     test('should return a list of 0 questions', async () => {
       expect(await questionRepo.getQuestions()).toHaveLength(0)
@@ -92,4 +93,11 @@ describe('question repository', () => {
       expect(await questionRepo.getQuestions()).toHaveLength(3)
     })
   })
+})
+
+  describe('Answers', () => {
+    
+    
+  });
+  
 })
