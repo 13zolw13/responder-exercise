@@ -7,14 +7,16 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^7.1.0",
-    "jest": "^28.1.0"
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.16"
   },
   "dependencies": {
     "body-parser": "^1.20.0",
