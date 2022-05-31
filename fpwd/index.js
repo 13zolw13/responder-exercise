@@ -12,15 +12,15 @@ app.use(json())
 app.use(makeRepositories(STORAGE_FILE_PATH))
 
 app.get('/', (_, res) => {
-  res.json({ message: 'Welcome to responder!' })
+  res.status(200).json({ message: 'Welcome to responder!' })
 })
 
 app.get('/questions', async (req, res) => {
   const questions = await req.repositories.questionRepo.getQuestions()
-  res.json(questions)
+  res.status(200).json(questions)
 })
 
-app.get('/questions/:questionId', (req, res) => {})
+app.get('/questions/:questionId', async (req, res) => {})
 
 app.post('/questions', (req, res) => {})
 
@@ -33,3 +33,5 @@ app.get('/questions/:questionId/answers/:answerId', (req, res) => {})
 app.listen(PORT, () => {
   console.log(`Responder app listening on port ${PORT}`)
 })
+
+module.exports = app
