@@ -16,30 +16,53 @@ describe('question repository', () => {
     await rm(TEST_QUESTIONS_FILE_PATH)
   })
 
-describe('Test method getQuestions', () => {
-  test('should return a list of 0 questions', async () => {
-    expect(await questionRepo.getQuestions()).toHaveLength(0)
+  describe('Test method getQuestions', () => {
+    test('should return a list of 0 questions', async () => {
+      expect(await questionRepo.getQuestions()).toHaveLength(0)
+    })
+
+    test('should return a list of 2 questions', async () => {
+      const testQuestions = [
+        {
+          id: faker.datatype.uuid(),
+          summary: 'What is my name?',
+          author: 'Jack London',
+          answers: []
+        },
+        {
+          id: faker.datatype.uuid(),
+          summary: 'Who are you?',
+          author: 'Tim Doods',
+          answers: []
+        }
+      ]
+
+      await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+
+      expect(await questionRepo.getQuestions()).toHaveLength(2)
+    })
   })
 
-  test('should return a list of 2 questions', async () => {
-    const testQuestions = [
-      {
-        id: faker.datatype.uuid(),
-        summary: 'What is my name?',
-        author: 'Jack London',
-        answers: []
-      },
-      {
-        id: faker.datatype.uuid(),
-        summary: 'Who are you?',
-        author: 'Tim Doods',
-        answers: []
-      }
-    ]
+  describe('Test method getQuestionById', () => {
+    test('should return a question search by id', async () => {
+      const testQuestions = [
+        {
+          id: faker.datatype.uuid(),
+          summary: 'What is my name?',
+          answers: []
+        },
+        {
+          id: faker.datatype.uuid(),
+          summary: 'who let the dogs out?',
+          answers: []
+        }
+      ]
 
-    await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+      await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
+      questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
 
-    expect(await questionRepo.getQuestions()).toHaveLength(2)
+      const response = await questionRepo.getQuestionById(testQuestions[0].id)
+      expect(response).toEqual(testQuestions[0])
+    })
   })
-})
 })
