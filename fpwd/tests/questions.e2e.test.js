@@ -7,4 +7,11 @@ describe('e2e tests', () => {
     expect(response.body.message).toBe('Welcome to responder!')
     expect(response.statusCode).toBe(200)
   })
+
+      test(' #/questions should return questions', async () => {
+        const response = await request(app).get('/questions ')
+        expect(response.statusCode).toBe(200)
+        expect(response.body).toHaveLength(2)
+      })
+    
 })
