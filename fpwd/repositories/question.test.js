@@ -3,6 +3,35 @@ const { faker } = require('@faker-js/faker')
 const { makeQuestionRepository } = require('./question')
 const { get } = require('http')
 
+const QuestionsMock = [
+  {
+    id: faker.datatype.uuid(),
+    summary: 'What is my name?',
+    author: 'Tim Doods',
+    answers: [
+      {
+        id: faker.datatype.uuid(),
+        summary: 'Jack London'
+      },
+      {
+        id: faker.datatype.uuid(),
+        summary: 'Jack Reacher'
+      }
+    ]
+  },
+  {
+    id: faker.datatype.uuid(),
+    summary: 'who let the dogs out?',
+    author: 'Jack  Ryan',
+    answers: []
+  },
+  {
+    id: faker.datatype.uuid(),
+    summary: 'who let the dogs out?',
+    author: 'Jack London',
+    answers: []
+  }
+]
 describe('question repository', () => {
   const TEST_QUESTIONS_FILE_PATH = 'test-questions.json'
   let questionRepo
@@ -23,42 +52,20 @@ describe('question repository', () => {
         expect(await questionRepo.getQuestions()).toHaveLength(0)
       })
 
-      test('should return a list of 2 questions', async () => {
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            author: 'Jack London',
-            answers: []
-          },
-          {
-            id: faker.datatype.uuid(),
-            summary: 'Who are you?',
-            author: 'Tim Doods',
-            answers: []
-          }
-        ]
+      test(`should return a list of ${QuestionsMock.length} questions`, async () => {
+        const testQuestions = QuestionsMock
 
         await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
 
-        expect(await questionRepo.getQuestions()).toHaveLength(2)
+        expect(await questionRepo.getQuestions()).toHaveLength(
+          QuestionsMock.length
+        )
       })
     })
 
     describe('Test method getQuestionById', () => {
       test('should return a question search by id', async () => {
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            answers: []
-          },
-          {
-            id: faker.datatype.uuid(),
-            summary: 'who let the dogs out?',
-            answers: []
-          }
-        ]
+        const testQuestions = QuestionsMock
 
         await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
@@ -75,23 +82,12 @@ describe('question repository', () => {
           summary: 'What the fox say?',
           answers: []
         }
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            answers: []
-          },
-          {
-            id: faker.datatype.uuid(),
-            summary: 'who let the dogs out?',
-            answers: []
-          }
-        ]
+        const testQuestions = QuestionsMock
 
         await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
         await questionRepo.addQuestion(newQuestion)
-        expect(await questionRepo.getQuestions()).toHaveLength(3)
+        expect(await questionRepo.getQuestions()).toContainEqual(newQuestion)
       })
     })
   })
@@ -99,18 +95,7 @@ describe('question repository', () => {
   describe('Answers', () => {
     describe('Test getAnswers', () => {
       test('should return answers from specific question ', async () => {
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            answers: []
-          },
-          {
-            id: faker.datatype.uuid(),
-            summary: 'who let the dogs out?',
-            answers: []
-          }
-        ]
+        const testQuestions = QuestionsMock
 
         await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         const response = await questionRepo.getAnswers(testQuestions[0].id)
@@ -119,18 +104,7 @@ describe('question repository', () => {
     })
     describe('Test getAnswer', () => {
       test('should return a specific answer', async () => {
-        const testQuestions = [
-          {
-            id: faker.datatype.uuid(),
-            summary: 'What is my name?',
-            answers: [
-              {
-                id: faker.datatype.uuid(),
-                summary: 'Jack London'
-              }
-            ]
-          }
-        ]
+        const testQuestions = QuestionsMock
 
         await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
         const response = await questionRepo.getAnswer(
@@ -141,7 +115,7 @@ describe('question repository', () => {
       })
     })
     describe('Test addAnswer', () => {
-      test('should add answer to question', async () => {
+      test('should add answer to a question', async () => {
         const testQuestions = [
           {
             id: faker.datatype.uuid(),
