@@ -117,7 +117,6 @@ describe('question repository', () => {
         expect(response).toEqual(testQuestions[0].answers)
       })
     })
-
     describe('Test getAnswer', () => {
       test('should return a specific answer', async () => {
         const testQuestions = [
