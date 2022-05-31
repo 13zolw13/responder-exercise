@@ -8,7 +8,12 @@ const makeQuestionRepository = fileName => {
     return questions
   }
 
-  const getQuestionById = async questionId => {}
+  const getQuestionById = async questionId => {
+    const questions = await getQuestions()
+    const question = questions.find(question => question.id === questionId)
+
+    return question
+  }
   const addQuestion = async question => {}
   const getAnswers = async questionId => {}
   const getAnswer = async (questionId, answerId) => {}
