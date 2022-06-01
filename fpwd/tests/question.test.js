@@ -103,7 +103,8 @@ describe('question repository', () => {
       test('should add answer to a question', async () => {
         const newAnswer = {
           id: faker.datatype.uuid(),
-          summary: 'Jack London'
+          summary: 'Jack London',
+          author: 'Tim Doods'
         }
         await questionRepo.addAnswer(QuestionsMock[1].id, newAnswer)
         expect(await questionRepo.getAnswers(QuestionsMock[1].id)).toEqual([
