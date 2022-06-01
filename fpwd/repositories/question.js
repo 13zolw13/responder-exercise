@@ -9,11 +9,17 @@ const makeQuestionRepository = fileName => {
   }
 
   const getQuestionById = async questionId => {
-    const questions = await getQuestions()
-    const question = questions.find(question => question.id === questionId)
+    try {
+      const questions = await getQuestions()
+      const question = questions.find(question => question.id === questionId)
 
-    return question
+      return question ? question : null
+    } catch (error) {
+      console.error(error)
+      throw new Error(error.message)
+    }
   }
+  
   const addQuestion = async question => {
     const questions = await getQuestions()
     questions.push(question)
