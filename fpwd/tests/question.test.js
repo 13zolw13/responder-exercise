@@ -4,6 +4,7 @@ const { makeQuestionRepository } = require('../repositories/question')
 const { get } = require('http')
 const { writeToFileMockData } = require('./writeToFileMockData')
 const { QuestionsMock } = require('./QuestionsMock')
+const { response } = require('..')
 
 describe('question repository', () => {
   const TEST_QUESTIONS_FILE_PATH = 'test-questions.json'
@@ -38,7 +39,13 @@ describe('question repository', () => {
         const response = await questionRepo.getQuestionById(QuestionsMock[0].id)
         expect(response).toEqual(QuestionsMock[0])
       })
+      test('should return null wrong question id', async () => {
+        questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
+        const response = await questionRepo.getQuestionById('wrong id')
+        expect(response).toBeNull()
+      })
     })
+  
 
     describe('Test method addQuestion', () => {
       test('should add a question', async () => {
