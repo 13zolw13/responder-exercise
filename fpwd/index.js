@@ -3,8 +3,8 @@ const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
 
-const STORAGE_FILE_PATH = 'questions_test.json'
-const PORT = 3000
+const STORAGE_FILE_PATH = process.env.STORAGE_FILE_PATH
+const PORT = process.env.PORT
 
 const app = express()
 
@@ -36,36 +36,52 @@ app.get('/questions/:questionId', async (req, res) => {
 })
 
 app.post('/questions', async (req, res) => {
-  const question = await req.repositories.questionRepo.addQuestion(req.body)
-  return res.status(201).json(question)
+  try {
+    const question = await req.repositories.questionRepo.addQuestion(req.body)
+    return res.status(201).json(question)
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 app.get('/questions/:questionId/answers', async (req, res) => {
-  const answers = await req.repositories.questionRepo.getAnswers(
-    req.params.questionId
-  )
-  return answers
-    ? res.status(200).json(answers)
-    : res.status(404).json({ message: 'Answers not found' })
+  try {
+    const answers = await req.repositories.questionRepo.getAnswers(
+      req.params.questionId
+    )
+    return answers
+      ? res.status(200).json(answers)
+      : res.status(404).json({ message: 'Answers not found' })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 app.post('/questions/:questionId/answers', async (req, res) => {
-  const answer = await req.repositories.questionRepo.addAnswer(
-    req.params.questionId,
-    req.body
-  )
-  return res.status(201).json(answer)
+  try {
+    const answer = await req.repositories.questionRepo.addAnswer(
+      req.params.questionId,
+      req.body
+    )
+    return res.status(201).json({ answer })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
-  const answer = await req.repositories.questionRepo.getAnswer(
-    req.params.questionId,
-    req.params.answerId
-  )
+  try {
+    const answer = await req.repositories.questionRepo.getAnswer(
+      req.params.questionId,
+      req.params.answerId
+    )
 
-  return answer
-    ? res.status(200).json(answer)
-    : res.status(404).json({ message: 'Answer not found' })
+    return answer
+      ? res.status(200).json(answer)
+      : res.status(404).json({ message: 'Answer not found' })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 if (process.env.NODE_ENV !== 'test') {
