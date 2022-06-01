@@ -16,10 +16,9 @@ const makeQuestionRepository = fileName => {
       return question ? question : null
     } catch (error) {
       console.error(error)
-      throw new Error(error.message)
     }
   }
-  
+
   const addQuestion = async question => {
     const questions = await getQuestions()
     questions.push(question)
@@ -27,15 +26,23 @@ const makeQuestionRepository = fileName => {
     await writeFile(fileName, JSON.stringify(questions))
   }
   const getAnswers = async questionId => {
-    const question = await getQuestionById(questionId)
+    try {
+      const question = await getQuestionById(questionId)
 
-    return question.answers
+      return question ? question.answers : null
+    } catch (error) {
+      console.error(error)
+    }
   }
   const getAnswer = async (questionId, answerId) => {
-    const answers = await getAnswers(questionId)
-    const answer = answers.find(answer => answer.id === answerId)
+    try {
+      const answers = await getAnswers(questionId)
+      const answer = answers.find(answer => answer.id === answerId)
 
-    return answer
+      return answer
+    } catch (error) {
+      console.error(error)
+    }
   }
   const addAnswer = async (questionId, answer) => {
     const questions = await getQuestions()
