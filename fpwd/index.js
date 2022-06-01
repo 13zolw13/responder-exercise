@@ -17,26 +17,33 @@ app.get('/', (_, res) => {
 
 app.get('/questions', async (req, res) => {
   const questions = await req.repositories.questionRepo.getQuestions()
-  res.status(200).json(questions)
+  return res.status(200).json(questions)
 })
 
 app.get('/questions/:questionId', async (req, res) => {
-  const question = await req.repositories.questionRepo.getQuestionById(
-    req.params.questionId
-  )
-  res.status(200).json(question)
+  try {
+    const question = await req.repositories.questionRepo.getQuestionById(
+      req.params.questionId
+    )
+
+    return question
+      ? res.status(200).json(question)
+      : res.status(404).json({ message: 'Question not found' })
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 app.post('/questions', async (req, res) => {
   const question = await req.repositories.questionRepo.addQuestion(req.body)
-  res.status(201).json(question)
+  return res.status(201).json(question)
 })
 
 app.get('/questions/:questionId/answers', async (req, res) => {
   const answers = await req.repositories.questionRepo.getAnswers(
     req.params.questionId
   )
-  res.status(200).json(answers)
+  return res.status(200).json(answers)
 })
 
 app.post('/questions/:questionId/answers', async (req, res) => {
@@ -44,17 +51,16 @@ app.post('/questions/:questionId/answers', async (req, res) => {
     req.params.questionId,
     req.body
   )
-  res.status(201).json(answer)
+  return res.status(201).json(answer)
 })
 
 app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
-
   const answer = await req.repositories.questionRepo.getAnswer(
     req.params.questionId,
     req.params.answerId
   )
 
-  res.status(200).json(answer)
+  return res.status(200).json(answer)
 })
 
 app.listen(PORT, () => {
