@@ -43,7 +43,9 @@ app.get('/questions/:questionId/answers', async (req, res) => {
   const answers = await req.repositories.questionRepo.getAnswers(
     req.params.questionId
   )
-  return res.status(200).json(answers)
+  return answers
+    ? res.status(200).json(answers)
+    : res.status(404).json({ message: 'Answers not found' })
 })
 
 app.post('/questions/:questionId/answers', async (req, res) => {
