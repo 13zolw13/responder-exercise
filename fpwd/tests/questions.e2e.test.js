@@ -36,11 +36,25 @@ describe('e2e tests', () => {
     expect(response.statusCode).toBe(201)
   })
 
-  test('should return answers', async () => {
-    const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
-    const response = await request(app).get(`/questions/${questionId}/answers`)
-    expect(response.statusCode).toBe(200)
+describe('/questions/:questionId/answers', () => {
+  describe('GET ', () => {
+    test('should return answers', async () => {
+      const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+      const response = await request(app).get(
+        `/questions/${questionId}/answers`
+      )
+      expect(response.statusCode).toBe(200)
+    })
+
+    test('should return 404 - wrong id ', async () => {
+      const questionId = 'WrongId'
+      const response = await request(app).get(
+        `/questions/${questionId}/answers`
+      )
+      expect(response.statusCode).toBe(404)
+    })
   })
+})
 
   test('should add new answer', async () => {
     const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
