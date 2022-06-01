@@ -3,36 +3,8 @@ const { faker } = require('@faker-js/faker')
 const { makeQuestionRepository } = require('../repositories/question')
 const { get } = require('http')
 const { writeToFileMockData } = require('./writeToFileMockData')
+const { QuestionsMock } = require('./QuestionsMock')
 
-const QuestionsMock = [
-  {
-    id: faker.datatype.uuid(),
-    summary: 'What is my name?',
-    author: 'Tim Doods',
-    answers: [
-      {
-        id: faker.datatype.uuid(),
-        summary: 'Jack London'
-      },
-      {
-        id: faker.datatype.uuid(),
-        summary: 'Jack Reacher'
-      }
-    ]
-  },
-  {
-    id: faker.datatype.uuid(),
-    summary: 'who let the dogs out?',
-    author: 'Jack  Ryan',
-    answers: []
-  },
-  {
-    id: faker.datatype.uuid(),
-    summary: 'who let the dogs out?',
-    author: 'Jack London',
-    answers: []
-  }
-]
 describe('question repository', () => {
   const TEST_QUESTIONS_FILE_PATH = 'test-questions.json'
   let questionRepo
