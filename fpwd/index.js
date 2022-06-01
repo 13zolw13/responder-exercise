@@ -37,8 +37,8 @@ app.get('/questions/:questionId', async (req, res) => {
 
 app.post('/questions', async (req, res) => {
   try {
-    const question = await req.repositories.questionRepo.addQuestion(req.body)
-    return res.status(201).json(question)
+    await req.repositories.questionRepo.addQuestion(req.body)
+    return res.status(201).json({ message: 'Question added' })
   } catch (error) {
     console.error(error)
   }
