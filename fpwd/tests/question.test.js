@@ -68,6 +68,12 @@ describe('question repository', () => {
         const response = await questionRepo.getAnswers(QuestionsMock[0].id)
         expect(response).toEqual(QuestionsMock[0].answers)
       })
+
+      test('should return null wrong id', async () => {
+        const response = await questionRepo.getAnswers('wrong id')
+        expect(response).toBeNull()
+      })
+
     })
     describe('Test getAnswer', () => {
       test('should return a specific answer', async () => {
