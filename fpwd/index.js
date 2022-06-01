@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
@@ -12,7 +13,7 @@ app.use(json())
 app.use(makeRepositories(STORAGE_FILE_PATH))
 
 app.get('/', (_, res) => {
-  res.status(200).json({ message: 'Welcome to responder!' })
+  return res.status(200).json({ message: 'Welcome to responder!' })
 })
 
 app.get('/questions', async (req, res) => {
@@ -67,8 +68,9 @@ app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
     : res.status(404).json({ message: 'Answer not found' })
 })
 
-app.listen(PORT, () => {
-  console.log(`Responder app listening on port ${PORT}`)
-})
-
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Responder app listening on port ${PORT}`)
+  })
+}
 module.exports = app
