@@ -2,7 +2,7 @@ const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
 
-const STORAGE_FILE_PATH = 'questions.json'
+const STORAGE_FILE_PATH = 'questions_test.json'
 const PORT = 3000
 
 const app = express()
@@ -27,7 +27,10 @@ app.get('/questions/:questionId', async (req, res) => {
   res.status(200).json(question)
 })
 
-app.post('/questions', (req, res) => {})
+app.post('/questions', async (req, res) => {
+  const question = await req.repositories.questionRepo.addQuestion(req.body)
+  res.status(201).json(question)
+})
 
 app.get('/questions/:questionId/answers', (req, res) => {})
 
