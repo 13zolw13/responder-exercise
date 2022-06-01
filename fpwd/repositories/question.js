@@ -1,4 +1,6 @@
+const { faker } = require('@faker-js/faker')
 const { readFile, writeFile } = require('fs/promises')
+const { answerDto } = require('../middleware/answer.validation')
 
 const makeQuestionRepository = fileName => {
   const getQuestions = async () => {
@@ -40,22 +42,25 @@ const makeQuestionRepository = fileName => {
       const answer = answers
         ? answers.find(answer => answer.id === answerId)
         : null
- 
+
       return answer ? answer : null
     } catch (error) {
       console.error(error)
     }
   }
   const addAnswer = async (questionId, answer) => {
-    const questions = await getQuestions()
-    questions.forEach(question => {
-      if (question.id === questionId) {
-        question.answers.push(answer)
-      }
-    })
-    await writeFile(fileName, JSON.stringify(questions))
+    try {
+      const value = await answerDto.validate(answer)
+      value.id = faker.datatype.uuid()
+      const questions = await getQuestions()
+      questions.forEach(question => {
+        if (question.id === questionId) {
+          question.answers.push({ id: value.id, ...value.value })
+        }
+      })
+      await writeFile(fileName, JSON.stringify(questions))
+    } catch (error) {}
   }
-
 
   return {
     getQuestions,
