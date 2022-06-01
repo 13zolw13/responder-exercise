@@ -47,7 +47,15 @@ app.post('/questions/:questionId/answers', async (req, res) => {
   res.status(201).json(answer)
 })
 
-app.get('/questions/:questionId/answers/:answerId', (req, res) => {})
+app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
+
+  const answer = await req.repositories.questionRepo.getAnswer(
+    req.params.questionId,
+    req.params.answerId
+  )
+
+  res.status(200).json(answer)
+})
 
 app.listen(PORT, () => {
   console.log(`Responder app listening on port ${PORT}`)
