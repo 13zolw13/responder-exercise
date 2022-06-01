@@ -45,4 +45,13 @@ describe('e2e tests', () => {
       .send(newAnswer)
     expect(response.statusCode).toBe(201)
   })
+
+  test('should return answer details', async () => {
+    const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+    const answerId = 'ce7bddfb-0544-4b14-92d8-188b03c41ee4'
+    const response = await request(app).get(
+      `/questions/${questionId}/answers/${answerId}`
+    )
+    expect(response.statusCode).toBe(200)
+  })
 })
