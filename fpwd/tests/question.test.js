@@ -52,6 +52,7 @@ describe('question repository', () => {
         const newQuestion = {
           id: faker.datatype.uuid(),
           summary: 'What the fox say?',
+          author: 'JCV',
           answers: []
         }
 
