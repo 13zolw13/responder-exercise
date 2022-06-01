@@ -63,7 +63,7 @@ app.post('/questions/:questionId/answers', async (req, res) => {
       req.params.questionId,
       req.body
     )
-    return res.status(201).json({ answer })
+    return res.status(201).json({ message: 'Answer added' })
   } catch (error) {
     console.error(error)
   }
