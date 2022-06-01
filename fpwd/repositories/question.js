@@ -37,9 +37,11 @@ const makeQuestionRepository = fileName => {
   const getAnswer = async (questionId, answerId) => {
     try {
       const answers = await getAnswers(questionId)
-      const answer = answers.find(answer => answer.id === answerId)
-
-      return answer
+      const answer = answers
+        ? answers.find(answer => answer.id === answerId)
+        : null
+ 
+      return answer ? answer : null
     } catch (error) {
       console.error(error)
     }
