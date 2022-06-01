@@ -83,13 +83,21 @@ describe('question repository', () => {
         )
         expect(response).toEqual(QuestionsMock[0].answers[0])
       })
-            test('should return null wrong id', async () => {
-              const response = await questionRepo.getAnswer(
-                'wrong id',
-                QuestionsMock[0].answers[0].id
-              )
-              expect(response).toBeNull()
-            })
+      test('should return null wrong question id', async () => {
+        const response = await questionRepo.getAnswer(
+          'wrong id',
+          QuestionsMock[0].answers[0].id
+        )
+        expect(response).toBeNull()
+      })
+
+      test('should return null wrong answer id', async () => {
+        const response = await questionRepo.getAnswer(
+          QuestionsMock[0].id,
+          'wrong id'
+        )
+        expect(response).toBeNull()
+      })
     })
     describe('Test addAnswer', () => {
       test('should add answer to a question', async () => {
