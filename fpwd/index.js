@@ -62,7 +62,9 @@ app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
     req.params.answerId
   )
 
-  return res.status(200).json(answer)
+  return answer
+    ? res.status(200).json(answer)
+    : res.status(404).json({ message: 'Answer not found' })
 })
 
 app.listen(PORT, () => {
