@@ -32,7 +32,12 @@ app.post('/questions', async (req, res) => {
   res.status(201).json(question)
 })
 
-app.get('/questions/:questionId/answers', (req, res) => {})
+app.get('/questions/:questionId/answers', (req, res) => {
+  const answers = req.repositories.questionRepo.getAnswers(
+    req.params.questionId
+  )
+  res.status(200).json(answers)
+})
 
 app.post('/questions/:questionId/answers', (req, res) => {})
 
