@@ -39,7 +39,13 @@ app.get('/questions/:questionId/answers', (req, res) => {
   res.status(200).json(answers)
 })
 
-app.post('/questions/:questionId/answers', (req, res) => {})
+app.post('/questions/:questionId/answers', async (req, res) => {
+  const answer = await req.repositories.questionRepo.addAnswer(
+    req.params.questionId,
+    req.body
+  )
+  res.status(201).json(answer)
+})
 
 app.get('/questions/:questionId/answers/:answerId', (req, res) => {})
 
