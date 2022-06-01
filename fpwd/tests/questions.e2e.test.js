@@ -25,4 +25,12 @@ describe('e2e tests', () => {
         .send(QuestionsMock[1])
     expect(response.statusCode).toBe(201)
   })
+    
+    test('should return answers', async () => {
+      const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+      const response = await request(app).get(
+        `/questions/${questionId}/answers`
+      )
+      expect(response.statusCode).toBe(200)
+    })
 })
