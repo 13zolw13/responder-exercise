@@ -1,3 +1,4 @@
+const { faker } = require('@faker-js/faker')
 const request = require('supertest')
 const app = require('../index')
 const QuestionsMock = require('./QuestionsMock')
@@ -22,15 +23,26 @@ describe('e2e tests', () => {
   test('should add new question', async () => {
     const response = await request(app)
       .post('/questions')
-        .send(QuestionsMock[1])
+      .send(QuestionsMock[1])
     expect(response.statusCode).toBe(201)
   })
-    
-    test('should return answers', async () => {
-      const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
-      const response = await request(app).get(
-        `/questions/${questionId}/answers`
-      )
-      expect(response.statusCode).toBe(200)
-    })
+
+  test('should return answers', async () => {
+    const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+    const response = await request(app).get(`/questions/${questionId}/answers`)
+    expect(response.statusCode).toBe(200)
+  })
+
+  test('should add new answer', async () => {
+    const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+    const newAnswer = {
+      id: faker.datatype.uuid(),
+      author: 'Brian McKenzie',
+      summary: 'The Earth is flat.'
+    }
+    const response = await request(app)
+      .post(`/questions/${questionId}/answers`)
+      .send(newAnswer)
+    expect(response.statusCode).toBe(201)
+  })
 })
