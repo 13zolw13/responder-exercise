@@ -1,10 +1,22 @@
 const { faker } = require('@faker-js/faker')
 const request = require('supertest')
 const app = require('../index')
-const QuestionsMock = require('./QuestionsMock')
+const { questions } = require('./questionsMock.e2e')
+const { writeToFileMockData } = require('./writeToFileMockData')
+const { QuestionsMock } = require('./QuestionsMock')
+const { rm } = require('fs/promises')
 
 describe('e2e tests', () => {
-
+  const TEST_QUESTIONS_FILE_PATH = process.env.STORAGE_TEST_FILE_PATH
+  beforeAll(async () => {
+    await writeToFileMockData(TEST_QUESTIONS_FILE_PATH, questions)
+  })
+  beforeEach(async () => {
+    await writeToFileMockData(TEST_QUESTIONS_FILE_PATH, questions)
+  })
+  afterAll(async () => {
+    await rm(TEST_QUESTIONS_FILE_PATH)
+  })
   describe('/', () => {
     describe('GET', () => {
       test('should  return message ', async () => {
