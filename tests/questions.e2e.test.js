@@ -93,6 +93,18 @@ describe('e2e tests', () => {
           .send(newAnswer)
         expect(response.statusCode).toBe(201)
       })
+      test('should not add new answer- no author', async () => {
+        const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+        const newAnswer = {
+          id: faker.datatype.uuid(),
+
+          summary: 'The Earth is flat.'
+        }
+        const response = await request(app)
+          .post(`/questions/${questionId}/answers`)
+          .send(newAnswer)
+        expect(response.statusCode).toBe(400)
+      })
     })
   })
 
