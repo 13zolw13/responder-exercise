@@ -61,15 +61,20 @@ const makeQuestionRepository = fileName => {
   const addAnswer = async (questionId, answer) => {
     try {
       const value = await answerDto.validate(answer)
-      value.id = faker.datatype.uuid()
+      if (value.error?.details[0].message) {
+        return value.error.details[0].message
+      }
+
       const questions = await getQuestions()
       questions.forEach(question => {
         if (question.id === questionId) {
-          question.answers.push({ id: value.id, ...value.value })
+          question.answers.push({ id: faker.datatype.uuid(), ...value.value })
         }
       })
       await writeFile(fileName, JSON.stringify(questions))
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return {
