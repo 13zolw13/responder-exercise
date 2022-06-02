@@ -27,4 +27,6 @@ GET /questions/50f9e662-fa0e-4ec7-b53b-7845e8f821c3/answers/d498c0a3-5be2-4354-a
 
 Please make sure you write unit tests - part of the exercise is to explore your ability to write them. Also, try to cover all endpoints, however, this is not crucial.
 
+## How to send the solution back
 
+Upload your solution to either Github or Gitlab and send us the link.
