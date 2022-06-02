@@ -73,7 +73,7 @@ describe('e2e tests', () => {
       })
 
       test(' should return 404 if question not found', async () => {
-        const questionId = 'WrongId'
+        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
         const response = await request(app).get(`/questions/${questionId}`)
         expect(response.statusCode).toBe(404)
       })
@@ -90,8 +90,8 @@ describe('e2e tests', () => {
         expect(response.statusCode).toBe(200)
       })
 
-      test('should return 404 - wrong id ', async () => {
-        const questionId = 'WrongId'
+      test('should return 404 - question not found', async () => {
+        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
         const response = await request(app).get(
           `/questions/${questionId}/answers`
         )
@@ -139,7 +139,7 @@ describe('e2e tests', () => {
       })
 
       test('should return wrong question id', async () => {
-        const questionId = 'wrongId'
+        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
         const answerId = 'ce7bddfb-0544-4b14-92d8-188b03c41ee4'
         const response = await request(app).get(
           `/questions/${questionId}/answers/${answerId}`
@@ -147,9 +147,9 @@ describe('e2e tests', () => {
         expect(response.statusCode).toBe(404)
       })
 
-      test('should return wrong answer id', async () => {
+      test('should return wrong id - answer not found', async () => {
         const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
-        const answerId = 'wrongId'
+        const answerId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
         const response = await request(app).get(
           `/questions/${questionId}/answers/${answerId}`
         )
