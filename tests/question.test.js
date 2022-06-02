@@ -112,6 +112,24 @@ describe('question repository', () => {
           newAnswer
         ])
       })
+
+        test('should not add a  new answer to the question - no author', async () => {
+          const newAnswer = {
+            id: faker.datatype.uuid(),
+            summary: 'Jack London'
+          }
+          await questionRepo.addAnswer(QuestionsMock[1].id, newAnswer)
+          expect(await questionRepo.getAnswers(QuestionsMock[1].id)).toEqual([])
+        })
+
+        test('should not add a  new answer to the question - no summary', async () => {
+          const newAnswer = {
+            id: faker.datatype.uuid(),
+            author: 'Tim Doods'
+          }
+          await questionRepo.addAnswer(QuestionsMock[1].id, newAnswer)
+          expect(await questionRepo.getAnswers(QuestionsMock[1].id)).toEqual([])
+        })
     })
   })
 })
