@@ -1,18 +1,30 @@
 const { valid } = require('joi')
 const { IdDto } = require('./checkId.validation')
 
-const checkValidId = function (req, res, next) {
-  if (req.params?.answerId || req.params?.questionId) {
-    const checkingID = req.params.answerId || req.params.questionId
-    const value = IdDto.validate(checkingID)
-
-    if (value.error?.details[0].message) {
-      return res.status(400).json({ message: 'Invalid ID' })
-    } else {
-      next()
-    }
+const checkForQuestionValidId = function (req, res, next) {
+  if (!req.params.questionId) {
+    next()
   } else {
+    const value = IdDto.validate(req.params.questionId)
+
+    if (value.error) {
+      return res.status(400).json({ message: value.error.details[0].message })
+    }
     next()
   }
 }
-module.exports = { checkValidId }
+
+const checkForAnswerValidId = function (req, res, next) {
+  if (!req.params.answerId) {
+    next()
+  } else {
+    const value = IdDto.validate(req.params.answerId)
+
+    if (value.error) {
+      return res.status(400).json({ message: value.error.details[0].message })
+    }
+    next()
+  }
+}
+
+module.exports = { checkForQuestionValidId, checkForAnswerValidId }
