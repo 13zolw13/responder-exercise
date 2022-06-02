@@ -42,6 +42,25 @@ describe('e2e tests', () => {
           .send(QuestionsMock[1])
         expect(response.statusCode).toBe(201)
       })
+      test('should not add new a question- missing author', async () => {
+        const MissingAuthor = {
+          summary: 'Have You Ever Been To A Zoo?',
+          answers: []
+        }
+        const response = await request(app)
+          .post('/questions')
+          .send(MissingAuthor)
+        expect(response.statusCode).toBe(400)
+        expect(response.body.message).toBe('"author" is required')
+      })
+      test('should not add new a question- missing summary', async () => {
+        const MissingSummary = { author: 'Ron Mexico', answers: [] }
+        const response = await request(app)
+          .post('/questions')
+          .send(MissingSummary)
+        expect(response.statusCode).toBe(400)
+        expect(response.body.message).toBe('"summary" is required')
+      })
     })
   })
 
