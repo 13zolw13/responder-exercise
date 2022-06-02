@@ -7,7 +7,7 @@ const { QuestionsMock } = require('./QuestionsMock')
 const { response } = require('..')
 
 describe('question repository', () => {
-  const TEST_QUESTIONS_FILE_PATH = 'test-questions.json'
+  const TEST_QUESTIONS_FILE_PATH = process.env.TEST_QUESTIONS_PATH
   let questionRepo
 
   beforeAll(async () => {
