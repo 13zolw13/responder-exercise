@@ -60,6 +60,31 @@ describe('question repository', () => {
         await questionRepo.addQuestion(newQuestion)
         expect(await questionRepo.getQuestions()).toContainEqual(newQuestion)
       })
+
+      test('should not add a new question- missing author', async () => {
+        const newQuestion = {
+          id: faker.datatype.uuid(),
+          summary: 'What the fox say?',
+
+          answers: []
+        }
+
+        questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
+        const response = await questionRepo.addQuestion(newQuestion)
+        expect(response).toEqual('"author" is required')
+      })
+      test('should not add a new question- missing summary', async () => {
+        const newQuestion = {
+          id: faker.datatype.uuid(),
+
+          author: 'JCV',
+          answers: []
+        }
+
+        questionRepo = makeQuestionRepository(TEST_QUESTIONS_FILE_PATH)
+        const response = await questionRepo.addQuestion(newQuestion)
+        expect(response).toEqual('"summary" is required')
+      })
     })
   })
 
