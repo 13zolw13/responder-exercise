@@ -25,7 +25,9 @@ const makeQuestionRepository = fileName => {
   const addQuestion = async question => {
     try {
       const value = await questionDto.validate(question)
-
+      if (value.error?.details[0].message) {
+        return value.error.details[0].message
+      }
       const questions = await getQuestions()
       questions.push({
         id: faker.datatype.uuid(),
