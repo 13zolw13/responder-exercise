@@ -3,7 +3,10 @@ const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
 
-const STORAGE_FILE_PATH = process.env.STORAGE_FILE_PATH
+const STORAGE_FILE_PATH =
+  process.env.NODE_ENV !== 'test'
+    ? process.env.STORAGE_FILE_PATH
+    : process.env.STORAGE_TEST_FILE_PATH
 const PORT = process.env.PORT
 
 const app = express()
