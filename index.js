@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const { urlencoded, json } = require('body-parser')
 const makeRepositories = require('./middleware/repositories')
-
+const { checkValidId } = require('./middleware/checkId.middleware')
 const STORAGE_FILE_PATH =
   process.env.NODE_ENV !== 'test'
     ? process.env.STORAGE_FILE_PATH
@@ -24,7 +24,7 @@ app.get('/questions', async (req, res) => {
   return res.status(200).json(questions)
 })
 
-app.get('/questions/:questionId', async (req, res) => {
+app.get('/questions/:questionId', checkValidId, async (req, res) => {
   try {
     const question = await req.repositories.questionRepo.getQuestionById(
       req.params.questionId
@@ -40,16 +40,16 @@ app.get('/questions/:questionId', async (req, res) => {
 
 app.post('/questions', async (req, res) => {
   try {
-   const question = await req.repositories.questionRepo.addQuestion(req.body)
-   return question
-     ? res.status(400).json({ message: question })
-     : res.status(201).json({ message: 'Question added' })
+    const question = await req.repositories.questionRepo.addQuestion(req.body)
+    return question
+      ? res.status(400).json({ message: question })
+      : res.status(201).json({ message: 'Question added' })
   } catch (error) {
     console.error(error)
   }
 })
 
-app.get('/questions/:questionId/answers', async (req, res) => {
+app.get('/questions/:questionId/answers', checkValidId, async (req, res) => {
   try {
     const answers = await req.repositories.questionRepo.getAnswers(
       req.params.questionId
@@ -62,7 +62,7 @@ app.get('/questions/:questionId/answers', async (req, res) => {
   }
 })
 
-app.post('/questions/:questionId/answers', async (req, res) => {
+app.post('/questions/:questionId/answers', checkValidId, async (req, res) => {
   try {
     const answer = await req.repositories.questionRepo.addAnswer(
       req.params.questionId,
@@ -76,20 +76,24 @@ app.post('/questions/:questionId/answers', async (req, res) => {
   }
 })
 
-app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
-  try {
-    const answer = await req.repositories.questionRepo.getAnswer(
-      req.params.questionId,
-      req.params.answerId
-    )
+app.get(
+  '/questions/:questionId/answers/:answerId',
+  checkValidId,
+  async (req, res) => {
+    try {
+      const answer = await req.repositories.questionRepo.getAnswer(
+        req.params.questionId,
+        req.params.answerId
+      )
 
-    return answer
-      ? res.status(200).json(answer)
-      : res.status(404).json({ message: 'Answer not found' })
-  } catch (error) {
-    console.error(error)
+      return answer
+        ? res.status(200).json(answer)
+        : res.status(404).json({ message: 'Answer not found' })
+    } catch (error) {
+      console.error(error)
+    }
   }
-})
+)
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
