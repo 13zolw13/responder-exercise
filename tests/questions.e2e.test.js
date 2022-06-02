@@ -77,6 +77,12 @@ describe('e2e tests', () => {
         const response = await request(app).get(`/questions/${questionId}`)
         expect(response.statusCode).toBe(404)
       })
+      test(' should return 400  not valid id', async () => {
+        const questionId = '50f-b53b-7845e8f8c'
+        const response = await request(app).get(`/questions/${questionId}`)
+        expect(response.statusCode).toBe(400)
+        expect(response.body.message).toBe('"value" must be a valid GUID')
+      })
     })
   })
 
@@ -89,19 +95,26 @@ describe('e2e tests', () => {
         )
         expect(response.statusCode).toBe(200)
       })
-
-      test('should return 404 - question not found', async () => {
-        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
-        const response = await request(app).get(
-          `/questions/${questionId}/answers`
-        )
-        expect(response.statusCode).toBe(404)
-      })
+    })
+    test('should return 404 - question not found', async () => {
+      const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
+      const response = await request(app).get(
+        `/questions/${questionId}/answers`
+      )
+      expect(response.statusCode).toBe(404)
+    })
+    test('should return 400 - wrong id', async () => {
+      const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9c'
+      const response = await request(app).get(
+        `/questions/${questionId}/answers`
+      )
+      expect(response.statusCode).toBe(400)
+      expect(response.body.message).toBe('"value" must be a valid GUID')
     })
 
     describe('POST ', () => {
       test('should add new answer', async () => {
-        const questionId = '0f9e662-fa0e-4ec7-b53b-7845e8f821c3'
+        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c3'
         const newAnswer = {
           id: faker.datatype.uuid(),
           author: 'Brian McKenzie',
@@ -138,7 +151,7 @@ describe('e2e tests', () => {
         expect(response.statusCode).toBe(200)
       })
 
-      test('should return wrong question id', async () => {
+      test('should return question doesn`t exist', async () => {
         const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
         const answerId = 'ce7bddfb-0544-4b14-92d8-188b03c41ee4'
         const response = await request(app).get(
@@ -154,6 +167,24 @@ describe('e2e tests', () => {
           `/questions/${questionId}/answers/${answerId}`
         )
         expect(response.statusCode).toBe(404)
+      })
+      test('should return wrong question id', async () => {
+        const questionId = '50f9e662'
+        const answerId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
+        const response = await request(app).get(
+          `/questions/${questionId}/answers/${answerId}`
+        )
+        expect(response.statusCode).toBe(400)
+        expect(response.body.message).toBe('"value" must be a valid GUID')
+      })
+      test('should return wrong  answer id', async () => {
+        const questionId = '50f9e662-fa0e-4ec7-b53b-7845e8f821c9'
+        const answerId = '50f9e662-fa0e-4e'
+        const response = await request(app).get(
+          `/questions/${questionId}/answers/${answerId}`
+        )
+        expect(response.statusCode).toBe(400)
+        expect(response.body.message).toBe('"value" must be a valid GUID')
       })
     })
   })
